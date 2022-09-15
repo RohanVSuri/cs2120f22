@@ -6,21 +6,22 @@ from z3 import *
 # point on a working program to solve some problem
 # of interest. Here the problem is to compute and
 # return a non-negative square root of argument, n 
-def sqrt(n):
+def shape_problem():
     
     
     # Create z3 variable(s) representing the unknown
     # Here, the unknown, x, is the square root of n.
-    x = Real('x')
+    C, T, S = Reals('C T S')
     
     
     # Important: This is where you express what
     # values count as solutions using propositional
     # logic, but in the slightly different syntax
     # of Z3 expressions.
-    C1 = (x*x == n)     # a solution squared must be n
-    C2 = (x >= 0)       # and must also be non-negative
-    C = And(C1, C2)     # combine using logical "and"
+    C1 = (T + S + C == 10)    
+    C2 = ((C + S - T) == 6) 
+    C3 = ((C + T - S) == 4)    
+    C = And(C1, C2, C3)     # combine using logical "and"
     
     
     # Create a Z3 "SMT" solver object, and give it 
@@ -39,9 +40,8 @@ def sqrt(n):
     return -1
 
 # Set up and run the function and report its results
-n = 16
-s = sqrt(n)
+s = shape_problem()
 if (s == -1) :
-    print("There is no real square root of", n)
+    print("There is no solution")
 else :
-    print("The non-negative square root of", n, " is ", s)
+    print("A solution is", s)
