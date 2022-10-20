@@ -8,6 +8,8 @@ at binding names to values of a few data types.
 
 def five : ℕ := 5
 
+#check five 
+
 /-
 This definition declares five to be a variable name, to be bound
 to a value of type ℕ, and in particular now bound to the value, 5.

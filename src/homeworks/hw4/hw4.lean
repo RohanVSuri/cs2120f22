@@ -13,7 +13,9 @@ answer.
 -/
 
 def and_associative : Prop := 
-  _
+  ∀ (P Q R : Prop),
+  (P ∧ Q) ∧ R ↔ P ∧ (Q ∧ R)
+
 
 
 /- #1B [10 points]
@@ -35,6 +37,46 @@ Hint: unfold and_associative to start.
 
 theorem and_assoc_true : and_associative :=
 begin
+unfold and_associative,
+assume P Q R,
+apply iff.intro _ _ ,
+
+--forward
+assume h,
+
+let pq : P ∧ Q := and.elim_left h,
+let r : R := and.elim_right h,
+let p : P := and.elim_left pq,
+let q : Q := and.elim_right pq,
+
+ -- this is the same as doing:
+
+-- cases h with pq r
+apply and.intro p _,
+
+-- cases h with pq r,
+-- cases pq with p q,
+
+-- exact p,
+-- -- assumption -> means the same as exact p
+
+-- apply and.intro _ _,
+
+-- exact and.elim_right(and.elim_left h),
+
+-- exact (and.elim_right h),
+
+cases h with pq r,
+cases pq with p q, 
+apply and.intro p (and.intro q r),
+-- this is all the same as the commented long stuff
+
+--backwards direction
+assume h, 
+cases h with p qr,
+cases qr with q r,
+exact (and.intro (and.intro p q) r),
+
 end
 
 
@@ -46,7 +88,7 @@ analogous to the proposition about ∧ in #1.
 -/
 
 def or_associative : Prop := 
-  _
+  ∀ (P Q R : Prop), P ∨ (Q ∨ R) ↔ (P ∨ Q) ∨ R
 
 
 /- #2B [10 points]
@@ -64,6 +106,39 @@ Complete the following formal proof.
 
 theorem or_associative_true : or_associative :=
 begin
+unfold or_associative,
+assume P Q R,
+apply iff.intro _ _,
+-- you could create the arguments first and then apply them to iff.intro
+
+-- forward
+assume h,
+apply or.elim h _ _, 
+
+-- case P
+assume p, 
+apply or.inl _,
+exact or.inl p, 
+
+
+-- case Q or R is true
+
+assume qr, 
+apply or.elim qr _ _,
+
+--case Q
+assume q, 
+apply or.inl _,
+apply or.inr q,
+
+--case R
+assume r,
+apply or.inr r,
+
+
+
+-- backwards
+
 end
 
 
@@ -72,7 +147,7 @@ Write a formal statement of the proposition.
 -/
 
 def arrow_transitive : Prop :=
-  _
+  ∀ (P Q R : Prop), (P → Q) → (Q → R) → (P → R) 
 
 
 /- #3B [10 points]
@@ -92,6 +167,17 @@ yourself a proof of its conclusion.
 /- #3C [5 points]. 
 Write a formal proof of it.
 -/
+example : arrow_transitive :=
+begin
+unfold arrow_transitive,
+assume P Q R,
+assume pq : P → Q,
+assume qr : Q → R,
+assume p : P,
+let q : Q := pq p,
+let r : R := qr q,
+exact r,
+end
 
 
 /- #4
