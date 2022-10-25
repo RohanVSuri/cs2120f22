@@ -12,7 +12,10 @@ too. Replace the placeholder (_) with your
 answer.
 -/
 
-def and_associative : Prop := ∀ (P Q R : Prop), P ∧ (Q ∧ R) ↔ (P ∧ Q) ∧ R
+def and_associative : Prop := 
+  ∀ (P Q R : Prop),
+  (P ∧ Q) ∧ R ↔ P ∧ (Q ∧ R)
+
 
 
 /- #1B [10 points]
@@ -36,34 +39,43 @@ theorem and_assoc_true : and_associative :=
 begin
 unfold and_associative,
 assume P Q R,
-apply iff.intro _,
+apply iff.intro _ _ ,
+
 --forward
 assume h,
 
---apply and.intro _ _,
+-- let pq : P ∧ Q := and.elim_left h,
+-- let r : R := and.elim_right h,
+-- let p : P := and.elim_left pq,
+-- let q : Q := and.elim_right pq,
 
-let pq : P ∧ Q := and.elim_left h,
-let p : P := and.elim_left pq,
+ -- this is the same as doing:
 
-let q : Q := and.elim_right pq,
-let r : R := and.elim_right h,
+-- cases h with pq r
+-- apply and.intro p (and.intro q r),
 
+-- cases h with pq r,
+-- cases pq with p q,
+
+-- exact p,
+-- -- assumption -> means the same as exact p
+
+-- apply and.intro _ _,
+
+-- exact and.elim_right(and.elim_left h),
+
+-- exact (and.elim_right h),
+
+cases h with pq r,
+cases pq with p q, 
 apply and.intro p (and.intro q r),
+-- this is all the same as the commented long stuff
 
---exact p,
-
---backward
-
-assume h,
-
-let qr : Q ∧ R := and.elim_right h,
-let p : P := and.elim_left h,
-
-let r : R := and.elim_right qr,
-let q : Q := and.elim_left qr,
-
-apply and.intro (and.intro p q) r,
-
+--backwards direction
+assume h, 
+cases h with p qr,
+cases qr with q r,
+exact (and.intro (and.intro p q) r),
 
 end
 
@@ -76,7 +88,7 @@ analogous to the proposition about ∧ in #1.
 -/
 
 def or_associative : Prop := 
-    ∀ (P Q R : Prop), P ∨ (Q ∨ R) ↔ (P ∨ Q) ∨ R
+  ∀ (P Q R : Prop), P ∨ (Q ∨ R) ↔ (P ∨ Q) ∨ R
 
 
 /- #2B [10 points]
@@ -97,47 +109,35 @@ begin
 unfold or_associative,
 assume P Q R,
 apply iff.intro _ _,
+-- you could create the arguments first and then apply them to iff.intro
+
+-- forward
 assume h,
+apply or.elim h _ _, 
 
-apply or.elim h _ _,
---if p is true
-assume p,
+-- case P
+assume p, 
+apply or.inl _,
+exact or.inl p, 
 
-let pq : P ∨ Q := or.inl p,
-let pqr : (P ∨ Q) ∨ R := or.inl pq,
-apply pqr,
 
--- if q or r is true
+-- case Q or R is true
 
-assume qr,
-
+assume qr, 
 apply or.elim qr _ _,
 
-assume q,
-let pq : P ∨ Q := or.inr q,
-let pqr : (P ∨ Q) ∨ R := or.inl pq,
-apply pqr,
+--case Q
+assume q, 
+apply or.inl _,
+apply or.inr q,
 
+--case R
 assume r,
-let pqr : (P ∨ Q ) ∨ R := or.inr r,
-apply pqr,
-
-assume pqr,
-apply or.elim pqr _ _,
-assume pq,
-apply or.elim pq _ _,
-assume p,
-apply or.inl p,
-
-assume q,
-let qr : Q ∨ R := or.inl q,
-apply or.inr qr,
-
-assume r,
-let qr : Q ∨ R := or.inr r,
-apply or.inr qr,
+apply or.inr r,
 
 
+
+-- backwards
 
 end
 
@@ -146,8 +146,8 @@ end
 Write a formal statement of the proposition.
 -/
 
-def arrow_transitive : Prop :=   ∀ (P Q R : Prop), (P → Q) → (Q → R) → (P → R) 
-
+def arrow_transitive : Prop :=
+  ∀ (P Q R : Prop), (P → Q) → (Q → R) → (P → R) 
 
 
 /- #3B [10 points]
@@ -167,19 +167,16 @@ yourself a proof of its conclusion.
 /- #3C [5 points]. 
 Write a formal proof of it.
 -/
-theorem arrow_trans : arrow_transitive :=
+example : arrow_transitive :=
 begin
 unfold arrow_transitive,
 assume P Q R,
-
-assume pq,
-assume qr,
-assume p,
-
+assume pq : P → Q,
+assume qr : Q → R,
+assume p : P,
 let q : Q := pq p,
 let r : R := qr q,
 exact r,
-
 end
 
 
@@ -197,27 +194,15 @@ logic by completing the following answer.
 
 def contrapositive : Prop :=
   ∀ (Raining Wet : Prop), 
-    (Raining → Wet) → (¬Wet → ¬Raining)
+    (Raining → Wet) → (¬Raining → ¬Wet)
 
 
 /- #4B [10 points]. 
 -/
 
-variables A B C : Prop 
-#check (A → B) → (¬A → ¬B)
-
 theorem contrapositive_valid : contrapositive :=
 begin
-unfold contrapositive,
-assume Raining Wet,
-assume h,
-assume b,
-assume a,
 
-let x := h a,
-
-
-end
 /- #4C [5 points]. 
 
 Give an English language proof of it.
@@ -282,3 +267,4 @@ argument: a proof of the left or of
 the right side, respectively.
 -/
 end
+

@@ -6,6 +6,8 @@
 #check @and.intro       -- ∀ {a b : Prop}, a → b → a ∧ b
 #check @and.elim_left   -- ∀ {a b : Prop}, a ∧ b → a
 #check @and.elim_right  -- ∀ {a b : Prop}, a ∧ b → b
+-- "and elim right applied to a proof of a and b returns a proof of b"
+-- "and intro applied to a and b gives a proof of a and b"
 
 
 
