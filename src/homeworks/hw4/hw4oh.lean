@@ -202,7 +202,13 @@ def contrapositive : Prop :=
 
 theorem contrapositive_valid : contrapositive :=
 begin
-
+unfold contrapositive,
+assume R W h,
+assume nw,
+assume r,
+let w := h r,
+contradiction,
+end
 /- #4C [5 points]. 
 
 Give an English language proof of it.

@@ -133,8 +133,7 @@ assume r,
 apply or.inr r,
 
 -- reverse
- 
--- TO DO
+
 
 end
 

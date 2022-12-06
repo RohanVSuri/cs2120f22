@@ -29,7 +29,7 @@ and finally conclude P → Q.
 -/ 
 assume p,
 show Q,
-_
+
 /-
 The show tactic does nothing here. It can
 be used to select from among multiple goals,

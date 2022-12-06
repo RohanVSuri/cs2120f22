@@ -36,6 +36,7 @@ Similarly in Lean, the type of tt is bool (tt : bool) and the type of bool is Ty
 In Lean, the type of every basic data type is just Type. Types are values, too, in Lean.
 That let's us express ideas such as this: every value, t, of every data type T, equals itself
 -/
+#check bool
 
 #check ∀ (T : Type) (t : T), t = t
 -- for every type T, and every value t of this type, t = t.
